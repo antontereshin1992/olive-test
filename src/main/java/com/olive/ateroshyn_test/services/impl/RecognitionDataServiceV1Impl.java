@@ -28,6 +28,17 @@ public class RecognitionDataServiceV1Impl implements RecognitionDataServiceV1 {
     private void sendRecognitionData(RecognitionDataRequest detection) {
         RawRecognitionDataDto dto = recognitionDataMapper.toDto(detection);
 
-        recognitionDataKafkaProducer.sendRecognitionData(dto);
+        recognitionDataKafkaProducer.sendRecognitionData(dto).whenComplete((result, ex) -> {
+            if (ex != null) {
+                log.warn("Failed to send to Kafka", ex);
+                saveToRedisOrFile(dto);
+            } else {
+                log.trace("Successfully sent to Kafka.{} : {}", RecognitionDataKafkaProducer.TOPIC, dto);
+            }
+        });
+    }
+
+    private void saveToRedisOrFile(RawRecognitionDataDto failedDto) {
+        //todo: implement storing failed dtos for following processing (DLQ strategy)
     }
 }

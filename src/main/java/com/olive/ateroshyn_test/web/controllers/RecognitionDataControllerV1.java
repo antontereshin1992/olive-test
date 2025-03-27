@@ -19,8 +19,14 @@ public class RecognitionDataControllerV1 implements RecognitionDataApiV1 {
 
     @Override
     public ResponseEntity<Void> batchRecognitionData(@RequestBody List<RecognitionDataRequest> requests) {
-        recognitionDataServiceV1.sendBatch(requests);
-        return ResponseEntity.ok().build();
+        log.debug("batchRecognitionData {}", requests);
+        if (requests != null && !requests.isEmpty()) {
+            recognitionDataServiceV1.sendBatch(requests);
+            return ResponseEntity.accepted().build();
+        }
+
+        log.warn("Received undefined data {}", requests);
+        return ResponseEntity.badRequest().build();
     }
 
 }
