@@ -8,11 +8,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RawRecognitionDataDto {
-    public String timestamp;
-    public String source;
-    public String uniqueId;
-    public double confidence;
-    public String type;
-    public double lat;
-    public double lon;
+    private String timestamp;
+    private String source;
+    private String uniqueId;
+    private double confidence;
+    private String type;
+    private double lat;
+    private double lon;
 }
