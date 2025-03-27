@@ -1,24 +1,21 @@
 package com.olive.ateroshyn_test.services.impl;
 
+import com.olive.ateroshyn_test.kafka.RecognitionDataKafkaProducer;
 import com.olive.ateroshyn_test.services.RecognitionDataServiceV1;
+import com.olive.ateroshyn_test.web.requests.RecognitionDataRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class RecognitionDataServiceV1Impl implements RecognitionDataServiceV1 {
 
-    public static final String TOPIC = "recognitions";
-    private final KafkaTemplate<String, Object> kafkaTemplate;
+    private final RecognitionDataKafkaProducer recognitionDataKafkaProducer;
 
-    public CompletableFuture<SendResult<String, Object>> sendRecognitionData() {
-        return kafkaTemplate.send(TOPIC, UUID.randomUUID().toString(), Map.of("test", "value111"));
+    @Override
+    public void sendBatch(List<RecognitionDataRequest> requests) {
+        System.out.println(requests.size());
     }
-
 }
